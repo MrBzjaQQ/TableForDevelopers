@@ -1,0 +1,37 @@
+﻿<script>
+        $(document).ready(function () {
+            $("#logInModalFade").modal('show');
+        });
+    </script>
+    <div id="logInModalFade" class="modal fade">
+        <div class="modal-header">
+             <button class="close" data-dismiss="modal" area-hidden="true">X</button>
+            <h4>Type your login and password.</h4>
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <th>Type your login:
+                        </th>
+                        <th>
+                            <input id="LoginInput" type="text" />
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Type your password:
+                        </th>
+                        <th>
+                            <input id="PasswordInput" type="text" />
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <input id="AcceptLoginButton" type="button" value="Accept" />
+                        </th>
+                        <th>
+                            <input id="CancelLoginButton" type="button" value="Cancel" />
+                        </th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
