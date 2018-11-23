@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Login";
+}
+         <div class="modal-content">
+             <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times</span>
+                 </button>
+                 <h3 class="modal-title">Войти</h3>
+             </div>
+             <div class="modal-body">
+                 <form>
+                     <div class="form-group">
+                         <label for="loginInput">Логин:</label>
+                         <input type="text" id="loginInput" class="form-control" placeholder="Введите Ваш логин" />
+                     </div>
+                     <div class="form-group">
+                         <label for="passwordInput">Пароль:</label>
+                         <input type="password" id="passwordInput" class="form-control" placeholder="Пароль" />
+                     </div>
+                     <div class="form-group form-check">
+                         <input type="checkbox" class="form-check-input" id="checkOutCheckBox" />
+                         <label class="form-check-label" for="checkOutCheckBox">Запомнить меня</label>
+                     </div>
+                 </form>
+             </div>
+             <div class="modal-footer">
+                 <button id="CancelLoginButton" class="btn btn-secondary" value="Cancel" data-dismiss="modal">Отмена</button>
+                 <button id="AcceptLoginButton" type="submit" class="btn btn-primary">Войти</button>
+             </div>
+         </div>
+ 

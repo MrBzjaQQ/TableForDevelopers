@@ -29,7 +29,11 @@ namespace TableForDevelopers.Controllers
 
         public ActionResult Login()
         {
-            return View();
+            return PartialView("Login");
+        }
+        public ActionResult Register()
+        {
+            return PartialView("Register");
         }
     }
 }

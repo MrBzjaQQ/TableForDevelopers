@@ -6,12 +6,12 @@ using System.Web.Mvc;
 
 namespace TableForDevelopers.Controllers
 {
-    public class LoginController : Controller
+    public class TableController : Controller
     {
-        // GET: Login
-        public ActionResult Login()
+        // GET: Table
+        public ActionResult Table()
         {
-            return PartialView();
+            return View();
         }
     }
 }
