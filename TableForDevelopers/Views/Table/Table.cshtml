@@ -1,1 +1,16 @@
-﻿
+﻿@model IEnumerable<TableForDevelopers.Models.CardModel>
+
+<div class="card-deck">
+    @foreach(var m in Model)
+    {
+        <div class="card" style="width: 18rem;">
+            <div class="card-header">
+            <h5 class="card-title">@m.Header</h5>
+             </div>
+            <div class="card-body">
+                Описание: @m.Description<br/>
+                Разработчик: @m.AppointedDeveloper
+            </div>
+        </div>
+    }
+</div>
