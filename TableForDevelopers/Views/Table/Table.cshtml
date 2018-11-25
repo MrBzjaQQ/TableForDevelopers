@@ -1,15 +1,19 @@
 ﻿@model IEnumerable<TableForDevelopers.Models.CardModel>
-
-<div class="card-deck">
-    @foreach(var m in Model)
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Scripts.Render("~/bundles/tableScripts")
+<div class="card-deck"> <!--Изменить на таблицу-->
+    @foreach(var card in Model)
     {
-        <div class="card" style="width: 18rem;">
+        <div class="@card.CardClass" style="max-width: 20rem;"> 
             <div class="card-header">
-            <h5 class="card-title">@m.Header</h5>
+            <h5 class="card-title">@card.Header</h5>
              </div>
-            <div class="card-body">
-                Описание: @m.Description<br/>
-                Разработчик: @m.AppointedDeveloper
+            <div class="@card.CardBodyClass">
+                @Html.ActionLink(card.Description, "Card", "Table", new { id = card.CardID }, new {@class = "aboutCard"})
+                <!--Описание: @card.Description<br/>-->
+                Разработчик: @card.AppointedDeveloper
             </div>
         </div>
     }

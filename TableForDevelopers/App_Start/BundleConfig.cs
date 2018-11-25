@@ -27,6 +27,8 @@ namespace TableForDevelopers
                       "~/Content/site.css"));
             bundles.Add(new ScriptBundle("~/bundles/layoutScripts").Include(
                       "~/Scripts/layoutScripts.js"));
+            bundles.Add(new ScriptBundle("~/bundles/tableScripts").Include(
+                      "~/Scripts/tableScripts.js"));
         }
     }
 }
