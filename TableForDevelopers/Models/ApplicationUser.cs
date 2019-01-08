@@ -8,14 +8,15 @@ namespace TableForDevelopers.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public UserRights rights { get; private set; }
+        public string Login { get; set; }
+        public UserType Rights { get; set; }
         public ApplicationUser()
         {
             
         }
     }
 
-    public enum UserRights
+    public enum UserType
     {
         Customer,
         Developer,

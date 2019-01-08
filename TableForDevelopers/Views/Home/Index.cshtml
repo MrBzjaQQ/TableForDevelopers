@@ -1,3 +1,15 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+<div>
+    <ul class="nav">
+        <li class="nav-item">
+            @Html.ActionLink("Создать проект", "CreateProject", "Project", null, new {@class = "nav-link CreateProject"})
+        </li>
+        <li class="nav-item">
+            @Html.ActionLink("Удалить проект", "RemoveProject", "Project", null, new {@class = "nav-link RemoveProject"})
+        </li>
+    </ul>
+    <h3>Текущие проекты:</h3>
+    
+</div>

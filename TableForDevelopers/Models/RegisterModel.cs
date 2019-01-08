@@ -15,10 +15,12 @@ namespace TableForDevelopers.Models
         public string Email { get; set; }
 
         [Required]
-        public string FirstName { get; set; }
+        public string Name { get; set; }
+
+        public string LastName { get; set; }
 
         [Required]
-        public string LastName { get; set; }
+        public string UserType { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

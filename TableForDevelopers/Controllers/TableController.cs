@@ -9,28 +9,26 @@ namespace TableForDevelopers.Controllers
 {
     public class TableController : Controller
     {
-        List<CardModel> cards = new List<CardModel>
-        {
-            new CardModel(0, CSSClassModel.Danger),
-            new CardModel(1, CSSClassModel.Dark),
-            new CardModel(2, CSSClassModel.Light),
-            new CardModel(3, CSSClassModel.Success)
-        };
         // GET: Table
         public ActionResult Table()
         {
-            return PartialView(cards);
+            var card = new CardModel();
+            card.CardID = 0;
+            card.Description = "Описание";
+            List<CardModel> row = new List<CardModel> { card, card, card, card, card };
+            List<CardModel> row2 = new List<CardModel> { card, null, card, null, card };
+            List<CardModel> row3 = new List<CardModel> { null, card, null, card, null };
+            List<List<CardModel>> rows = new List<List<CardModel>> { row, row2, row3, row2, row};
+            
+            return PartialView(rows);
         }
         public ActionResult Card(int id)
         {
-            List<string> developers = new List<string>()
-            {
-                "Иванов Иван",
-                "Васильев Василий",
-                "Максимов Максим"
-            };
-            ViewBag.Developers = developers;
-            return PartialView(cards.ElementAt(id));
+            return PartialView();
+        }
+        public ActionResult CreateCard()
+        {
+            return PartialView();
         }
     }
 }

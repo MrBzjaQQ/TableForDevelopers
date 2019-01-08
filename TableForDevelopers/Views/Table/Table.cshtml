@@ -1,21 +1,45 @@
-﻿@model IEnumerable<TableForDevelopers.Models.CardModel>
+﻿@model List<List<TableForDevelopers.Models.CardModel>>
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @Scripts.Render("~/bundles/tableScripts")
-   @Scripts.Render("~/bundles/popper")
-<div class="card-deck"> <!--Изменить на таблицу-->
-    @foreach(var card in Model)
-    {
-        <div class="@card.CardClass" style="max-width: 20rem;"> 
-            <div class="card-header">
-            <h5 class="card-title">@card.Header</h5>
-             </div>
-            <div class="@card.CardBodyClass">
-                @Html.ActionLink(card.Description, "Card", "Table", new { id = card.CardID }, new {@class = "aboutCard"})
-                <!--Описание: @card.Description<br/>-->
-                Разработчик: @card.AppointedDeveloper
-            </div>
-        </div>
-    }
+<div>
+    <ul class="nav">
+        <li class="nav-item">
+            @Html.ActionLink("Создать карточку", "CreateCard", "Table", null, new {@class = "nav-link CreateCard"})
+        </li>
+    </ul>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col" class="text-center">Backlog</th>
+                <th scope="col" class="text-center">Analyse</th>
+                <th scope="col" class="text-center">Developing</th>
+                <th scope="col" class="text-center">Testing</th>
+                <th scope="col" class="text-center">Done</th>
+            </tr>
+            @foreach(var row in Model)
+            {
+            <tr>
+                @foreach(var card in row)
+                {
+                <td>
+                    @if(card != null)
+                    {
+                    <div class="@card.CardClass" style="max-width: 20rem;"> 
+                        <div class="card-header">
+                            <h5 class="card-title">@card.Header</h5>
+                        </div>
+                        <div class="@card.CardBodyClass">
+                            @Html.ActionLink(card.Description, "Card", "Table", new { id = card.CardID }, new {@class = "aboutCard"})
+                            Разработчик: @card.AppointedDeveloper
+                        </div>
+                    </div>
+                    }
+                </td>
+                 }
+            </tr>
+            }
+  </thead>
+    </table>
 </div>

@@ -21,3 +21,36 @@ $(function () {
         });
     });
 })
+$(function () {
+    $.ajaxSetup({ cache: false });
+    $(".CreateProject").click(function (e) {
+
+        e.preventDefault();
+        $.get(this.href, function (data) {
+            $('#dialogContent').html(data);
+            $('#modDialog').modal('show');
+        });
+    });
+})
+$(function () {
+    $.ajaxSetup({ cache: false });
+    $(".RemoveProject").click(function (e) {
+
+        e.preventDefault();
+        $.get(this.href, function (data) {
+            $('#dialogContent').html(data);
+            $('#modDialog').modal('show');
+        });
+    });
+})
+$(function () {
+    $.ajaxSetup({ cache: false });
+    $(".CreateCard").click(function (e) {
+
+        e.preventDefault();
+        $.get(this.href, function (data) {
+            $('#dialogContent').html(data);
+            $('#modDialog').modal('show');
+        });
+    });
+})

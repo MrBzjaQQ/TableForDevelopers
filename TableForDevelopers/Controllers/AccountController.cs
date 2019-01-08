@@ -30,7 +30,16 @@ namespace TableForDevelopers.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                UserType type = UserType.Customer;
+                switch(model.UserType)
+                {
+                    case "Developer": { type = UserType.Developer; break; }
+                    case "Customer": { type = UserType.Customer; break; }
+                    case "TeamLeader": { type = UserType.TeamLeader; break; }
+
+                }
+                ApplicationUser user = new ApplicationUser { Login = model.Login, UserName = model.Name,
+                    Email = model.Email, Rights = type};
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
