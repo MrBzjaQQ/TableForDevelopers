@@ -10,10 +10,24 @@
              <div class="modal-body">
                  <form>
                      Здесь должны быть подробные параметры и описание карточки
+                     <div>
+                         <label for="chooseDeveloperDropdown">Исполнитель:</label>
+                         <div class="dropdown" id="chooseDeveloperDropdown">
+                             <button class="btn btn-secondary dropdown-toggle" type="button" id="chooseDeveloperButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                 @Model.AppointedDeveloper
+                                 </button>
+                             <div class="dropdown-menu" aria-labelledby="chooseDeveloperButton">
+                                 @foreach(string dev in ViewBag.Developers)
+                                 {
+                                    <a class="dropdown-item" href="#">@dev</a>
+                                 }
+                             </div>
+                         </div>
+                     </div>
                  </form>
              </div>
              <div class="modal-footer">
                  <button id="CancelLoginButton" class="btn btn-secondary" value="Cancel" data-dismiss="modal">Отмена</button>
-                 <button id="AcceptLoginButton" type="submit" class="btn btn-primary">Войти</button>
+                 <button id="AcceptLoginButton" type="submit" class="btn btn-primary">Применить</button>
              </div>
          </div>

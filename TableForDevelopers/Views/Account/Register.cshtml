@@ -1,0 +1,53 @@
+﻿@model TableForDevelopers.Models.RegisterModel
+@{
+    ViewBag.Title = "Register";
+}
+@using (Html.BeginForm()) 
+{
+@Html.AntiForgeryToken()
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Зарегистрироваться</h3>
+                @Html.ValidationSummary(false)
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="loginInput">Логин:</label>
+                    <!--<input type="text" class="form-control" id="loginInput" placeholder="example123" />-->
+                    @Html.EditorFor(model => model.Login, new { htmlAttributes = new { @class = "form-control", @id="loginInput", @placeholder="example123"}, })
+                </div>
+                <div class="form-group">
+                    <label for="emailInput">E-Mail:</label>
+                    <!--<input type="text" class="form-control" id="emailInput" placeholder="example@mail.com" />-->
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @id="emailInput", @placeholder="example@mail.com"}, })
+                </div>
+                <div class="form-group">
+                    <label for="firstNameInput">Имя:</label>
+                    <!--<input type="text" class="form-control" id="firstNameInput" placeholder="Иван" />-->
+                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", @id="firstNameInput", @placeholder="Иван"}, })
+                </div>
+                <div class="form-group">
+                    <label for="lastNameInput">Фамилия:</label>
+                    <!--<input type="text" class="form-control" id="lastNameInput" placeholder="Иванов" />-->
+                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", @id="lastNameInput", @placeholder="Иванов"}, })
+                </div>
+                <div class="form-group">
+                    <label for="passwordInput">Пароль:</label>
+                    <!--<input type="text" class="form-control" id="passwordInput" placeholder="Passw0rd132" />-->
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @id="passwordInput", @placeholder="Passw0rd132"}, })
+                </div>
+                <div class="form-group">
+                    <label for="repeatPasswordInput">Повторите пароль:</label>
+                    <!--<input type="text" class="form-control" id="repeatPasswordInput" placeholder="Passw0rd132" />-->
+                    @Html.EditorFor(model => model.PasswordConfirm, new { htmlAttributes = new { @class = "form-control", @id="repeatPasswordInput", @placeholder="Passw0rd132"}, })
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                <input type="submit" class="btn btn-primary" value="Регистрация"/>
+            </div>
+        </div>
+}

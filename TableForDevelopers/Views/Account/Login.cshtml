@@ -1,0 +1,33 @@
+﻿@model TableForDevelopers.Models.LoginModel
+@{
+    ViewBag.Title = "Login";
+}
+@using (Html.BeginForm())
+{
+@Html.AntiForgeryToken()
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h3 class="modal-title">Войти</h3>
+                 @Html.ValidationSummary()
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times</span>
+                 </button>
+             </div>
+             <div class="modal-body">
+                 <div class="form-group">
+                     <label for="loginInput">Логин:</label>
+                     <!--<input type="text" id="loginInput" class="form-control" placeholder="Введите Ваш логин" />-->
+                     @Html.EditorFor(model => model.Login, new { htmlAttributes = new { @class = "form-control", @id="loginInput", @placeholder="example123"}, })
+                 </div>
+                 <div class="form-group">
+                     <label for="passwordInput">Пароль:</label>
+                     <!--<input type="password" id="passwordInput" class="form-control" placeholder="Пароль" />-->
+                     @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @id="passwordInput", @placeholder="Passw0rd123"}, })
+                 </div>
+             </div>
+             <div class="modal-footer">
+                 <button id="CancelLoginButton" class="btn btn-secondary" value="Cancel" data-dismiss="modal">Отмена</button>
+                 <button id="AcceptLoginButton" type="submit" class="btn btn-primary">Войти</button>
+             </div>
+         </div>
+}

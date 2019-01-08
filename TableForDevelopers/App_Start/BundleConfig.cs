@@ -29,6 +29,8 @@ namespace TableForDevelopers
                       "~/Scripts/layoutScripts.js"));
             bundles.Add(new ScriptBundle("~/bundles/tableScripts").Include(
                       "~/Scripts/tableScripts.js"));
+            bundles.Add(new ScriptBundle("~/bundles/popper").Include(
+                "~/Scripts/popper.js"));
         }
     }
 }

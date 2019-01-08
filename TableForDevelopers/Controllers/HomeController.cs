@@ -1,13 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using TableForDevelopers.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+
 
 namespace TableForDevelopers.Controllers
 {
     public class HomeController : Controller
     {
+        private ApplicationUserManager UserManager
+        {
+            get
+            {
+                return HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+        }
         public ActionResult Index()
         {
             return View();
@@ -27,13 +36,26 @@ namespace TableForDevelopers.Controllers
             return View();
         }
 
-        public ActionResult Login()
+        [HttpPost]
+        public async Task<ActionResult> Register(RegisterModel model)
         {
-            return PartialView("Login");
-        }
-        public ActionResult Register()
-        {
-            return PartialView("Register");
+            if (ModelState.IsValid)
+            {
+                ApplicationUser user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    foreach (string error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error);
+                    }
+                }
+            }
+            return PartialView(model);
         }
     }
 }

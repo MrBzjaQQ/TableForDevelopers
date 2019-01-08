@@ -23,6 +23,13 @@ namespace TableForDevelopers.Controllers
         }
         public ActionResult Card(int id)
         {
+            List<string> developers = new List<string>()
+            {
+                "Иванов Иван",
+                "Васильев Василий",
+                "Максимов Максим"
+            };
+            ViewBag.Developers = developers;
             return PartialView(cards.ElementAt(id));
         }
     }
