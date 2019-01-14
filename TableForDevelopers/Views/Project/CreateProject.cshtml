@@ -17,7 +17,7 @@
         </div>
         <div class="form-group">
             <label>Клиент:</label>
-            @Html.DropDownListFor(model => model.CustomerName, new SelectList(new List<string>() {"Пользователь"}))
+            @Html.DropDownListFor(model => model.CustomerName, new SelectList(ViewBag.Customers))
         </div>
         <div class="form-group">
             <label>Стиль карточек</label>

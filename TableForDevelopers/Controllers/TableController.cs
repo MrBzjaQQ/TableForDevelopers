@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using TableForDevelopers.Models;
@@ -10,25 +11,138 @@ namespace TableForDevelopers.Controllers
     public class TableController : Controller
     {
         // GET: Table
-        public ActionResult Table()
+        public ActionResult Table(string project = "")
         {
-            var card = new CardModel();
-            card.CardID = 0;
-            card.Description = "Описание";
-            List<CardModel> row = new List<CardModel> { card, card, card, card, card };
-            List<CardModel> row2 = new List<CardModel> { card, null, card, null, card };
-            List<CardModel> row3 = new List<CardModel> { null, card, null, card, null };
-            List<List<CardModel>> rows = new List<List<CardModel>> { row, row2, row3, row2, row};
-            
-            return PartialView(rows);
+            List<List<CardModel>> table = new List<List<CardModel>>();
+            if (ModelState.IsValid)
+            {
+                using (CardContext context = new CardContext())
+                {
+                    List<CardModel> cards;
+                    if (project == string.Empty)
+                        cards = context.Cards.ToList();
+                    else
+                        cards = context.Cards.Where(i => i.Project == project).ToList();
+                    Stack<CardModel> backlog = new Stack<CardModel>(cards.Where(i => i.Status == CardStatus.Backlog.ToString()));
+                    Stack<CardModel> analysis = new Stack<CardModel>(cards.Where(i => i.Status == CardStatus.Analysis.ToString()));
+                    Stack<CardModel> developing = new Stack<CardModel>(cards.Where(i => i.Status == CardStatus.Developing.ToString()));
+                    Stack<CardModel> testing = new Stack<CardModel>(cards.Where(i => i.Status == CardStatus.Testing.ToString()));
+                    Stack<CardModel> done = new Stack<CardModel>(cards.Where(i => i.Status == CardStatus.Done.ToString()));
+                    int counter = cards.Count;
+                    do
+                    {
+                        List<CardModel> row = new List<CardModel>();
+                        if (backlog.Any())
+                            row.Add(backlog.Pop());
+                        else row.Add(null);
+                        if (analysis.Any())
+                            row.Add(analysis.Pop());
+                        else row.Add(null);
+                        if (developing.Any())
+                            row.Add(developing.Pop());
+                        else row.Add(null);
+                        if (testing.Any())
+                            row.Add(testing.Pop());
+                        else row.Add(null);
+                        if (done.Any())
+                            row.Add(done.Pop());
+                        else row.Add(null);
+                        table.Add(row);
+                        counter -= 5;
+
+                    } while (counter > 0);
+                }
+            }
+            return PartialView(table);
         }
         public ActionResult Card(int id)
         {
-            return PartialView();
+            CardModel card = new CardModel();
+            using (CardContext cards = new CardContext())
+            {
+                card = cards.Cards.FirstOrDefault(i => i.CardID == id);
+            }
+            FindProjects();
+            FindDevelopers();
+            return PartialView(card);
         }
         public ActionResult CreateCard()
         {
+            FindProjects();
+            FindDevelopers();
             return PartialView();
+        }
+        [HttpPost]
+        public ActionResult CreateCard(CardModel model)
+        {
+            CardModel card = new CardModel();
+            card.Project = string.Empty;
+            if (ModelState.IsValid)
+            {
+                card = new CardModel
+                {
+                    Header = model.Header,
+                    Description = model.Description,
+                    AppointedDeveloper = model.AppointedDeveloper,
+                    Project = model.Project,
+                    Status = model.Status
+                };
+                using (CardContext cardContext = new CardContext())
+                {
+                    cardContext.Cards.Add(card);
+                    cardContext.SaveChanges();
+                }
+            }
+            return RedirectToAction("Table", "Table", new { project = card.Project });
+        }
+        [HttpPost]
+        public ActionResult Card(CardModel model, int id, string buttonType)
+        {
+            if(buttonType == "delete")
+            {
+                using (CardContext cards = new CardContext())
+                {
+                    cards.Cards.Remove(cards.Cards.FirstOrDefault(i => i.CardID == id));
+                    cards.SaveChanges();
+                }
+                
+            }
+            if(buttonType == "edit")
+            {
+                using (CardContext cards = new CardContext())
+                {
+                    CardModel card = cards.Cards.FirstOrDefault(i => i.CardID == id);
+                    card.Header = model.Header;
+                    card.Description = model.Description;
+                    card.AppointedDeveloper = model.AppointedDeveloper;
+                    card.Project = model.Project;
+                    card.Status = model.Status;
+                    cards.SaveChanges();
+                }
+            }
+            return RedirectToAction("Table", "Table", new { project = model.Project });
+        }
+        private void FindDevelopers()
+        {
+            using (ApplicationContext users = ApplicationContext.Create())
+            {
+                var u = users.Users.Where(i => i.Rights == UserType.Developer).ToList();
+                List<string> developers = new List<string>();
+                foreach (var dev in u)
+                    developers.Add(dev.UserName);
+                ViewBag.Developers = developers;
+            }
+        }
+        private void FindProjects()
+        {
+            using (ProjectContext projects = new ProjectContext())
+            {
+                var projs = projects.Projects.ToList();
+                List<string> prjs = new List<string>();
+                foreach (var p in projs)
+                    prjs.Add(p.ProjectName);
+                ViewBag.Projects = prjs;
+            }
         }
     }
 }

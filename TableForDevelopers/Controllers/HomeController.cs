@@ -4,7 +4,8 @@ using System.Web.Mvc;
 using TableForDevelopers.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-
+using System.Data.Entity;
+using System.Collections.Generic;
 
 namespace TableForDevelopers.Controllers
 {
@@ -17,9 +18,17 @@ namespace TableForDevelopers.Controllers
                 return HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
         }
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            List<string> projectNames = new List<string>();
+            using (ProjectContext context = new ProjectContext())
+            {
+                List<ProjectModel> projects = await context.Projects.ToListAsync<ProjectModel>();
+                foreach (var p in projects)
+                    projectNames.Add(p.ProjectName);
+                
+            }
+            return View(projectNames);
         }
 
         public ActionResult About()

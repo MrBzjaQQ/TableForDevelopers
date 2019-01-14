@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TableForDevelopers.Models
 {
     public class ProjectModel
     {
-        public int CustomerID { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        public int ProjectID { get; set; }
         [Required]
         public string CustomerName { get; set; } //TODO: здесь выбрать пользователя с указанным именем из базы
         [Required]
@@ -18,11 +21,11 @@ namespace TableForDevelopers.Models
         {
             get
             {
-                return Style;
+                return _style;
             }
             set
             {
-                Style = value;
+                _style = value;
                 switch(value)
                 {
                     case "Primary": { CssStyle = CSSClassModel.Primary; break; }
@@ -39,5 +42,6 @@ namespace TableForDevelopers.Models
         }
         public Tuple<string, string> CssStyle { get; set; }
         private ApplicationUser _customer;
+        private string _style;
     }
 }

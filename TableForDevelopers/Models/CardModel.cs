@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TableForDevelopers.Models
 {
@@ -11,17 +12,11 @@ namespace TableForDevelopers.Models
     {
         public CardModel()
         {
-            CardID = 0;
-            Header = "Создать доску для управления проектом\n";
-            AppointedDeveloper = "Ершов Илья\n";
-            Status = CardStatus.Developing.ToString();
-            Description = "Сделать формы, потом припилить логику.\n";
-            Project = "Курсач по WEB\n";
-            _project = new ProjectModel();
-            _project.CssStyle = CSSClassModel.Info;
-            //load bitmap
+
         }
         //Будет отображено на карточке на доске
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public int CardID { get; set; }
         [Required]
         public string Header { get; set; } //Заголовок
@@ -52,12 +47,27 @@ namespace TableForDevelopers.Models
         [Required]
         public string Description { get; set; }
         [Required]
-        public string Project { get; set; } //TODO найти проект по названию
+        public string Project
+        {
+            get
+            {
+                return _projectName;
+            }
+            set
+            {
+                _projectName = value;
+                using (ProjectContext projects = new ProjectContext())
+                {
+                    _project = projects.Projects.FirstOrDefault(i => i.ProjectName == value);
+                }
+            }
+        } //TODO найти проект по названию
         public string CardClass => cssClass.Item1; //классы стилей вынесены в модель, чтобы была зависимость от проекта
         public string CardBodyClass => cssClass.Item2;
         private Tuple<string, string> cssClass => _project.CssStyle;
         private CardStatus _status;
         private ProjectModel _project;
+        private string _projectName;
         //public string Comments { get; set; } - TODO - если будет время
     }
 

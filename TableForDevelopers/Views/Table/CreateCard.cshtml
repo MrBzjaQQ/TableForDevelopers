@@ -17,11 +17,11 @@
         </div>
         <div class="form-group">
             <label for="AppointedDeveloper">Назначенный разработчик:</label>
-            @Html.DropDownListFor(model => model.AppointedDeveloper, new SelectList(new List<string>() {"Разработчик"}), new { @class = "btn btn-light dropdown-toggle", @id="AppointedDeveloper", @data_toggle="dropdown", @placeholder="Developer", @type="button", @readonly="true", @text="Developer", @aria_haspopup="true", @aria_expanded="false"})
+            @Html.DropDownListFor(model => model.AppointedDeveloper, new SelectList(ViewBag.Developers), new { @class = "btn btn-light dropdown-toggle", @id="AppointedDeveloper", @data_toggle="dropdown", @placeholder="Developer", @type="button", @readonly="true", @text="Developer", @aria_haspopup="true", @aria_expanded="false"})
         </div>
         <div class="form-group">
             <label for="ProjectName">Проект:</label>
-            @Html.DropDownListFor(model => model.Project, new SelectList(new List<string>() {"Проект"}), new { @class = "btn btn-light dropdown-toggle", @id="ProjectName", @data_toggle="dropdown", @placeholder="Developer", @type="button", @readonly="true", @text="Developer", @aria_haspopup="true", @aria_expanded="false"})
+            @Html.DropDownListFor(model => model.Project, new SelectList(ViewBag.Projects), new { @class = "btn btn-light dropdown-toggle", @id="ProjectName", @data_toggle="dropdown", @placeholder="Developer", @type="button", @readonly="true", @text="Developer", @aria_haspopup="true", @aria_expanded="false"})
         </div>
         <div class="form-group">
             <label for="DevelopmentStage">Этап разработки:</label>

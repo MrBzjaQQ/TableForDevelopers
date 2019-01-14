@@ -78,7 +78,7 @@ namespace TableForDevelopers.Controllers
                 ApplicationUser user = await UserManager.FindAsync(model.Login, model.Password);
                 if (user == null)
                 {
-                    ModelState.AddModelError("", "Неверный логин или пароль.");
+                    ModelState.AddModelError("ErrorMessage", "Неверный логин или пароль.");
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace TableForDevelopers.Controllers
                 }
             }
             ViewBag.returnUrl = returnUrl;
-            return View(model);
+            return PartialView(model);
         }
         public ActionResult Logout()
         {

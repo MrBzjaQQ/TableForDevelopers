@@ -12,7 +12,7 @@
     </div>
     <div class="modal-body">
         <label>Название проекта:</label>
-        @Html.DropDownListFor(model => model.CustomerName, new SelectList(new List<string>() {"Проект"}))
+        @Html.DropDownListFor(model => model.ProjectName, new SelectList(ViewBag.Projects))
     </div>
     <div class="modal-footer">
         <button id="CancelRemoveButton" class="btn btn-secondary" value="Cancel" data-dismiss="modal">Отмена</button>
