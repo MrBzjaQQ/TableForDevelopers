@@ -20,19 +20,14 @@ namespace TableForDevelopers.Controllers
         }
         public async Task<ActionResult> Index()
         {
-            List<string> projectNames = new List<string>();
-            using (ProjectContext context = new ProjectContext())
-            {
-                List<ProjectModel> projects = await context.Projects.ToListAsync<ProjectModel>();
-                foreach (var p in projects)
-                    projectNames.Add(p.ProjectName);
-                
-            }
+            CheckAuth();
+            List<string> projectNames = await LoadProjects();
             return View(projectNames);
         }
 
         public ActionResult About()
         {
+            CheckAuth();
             ViewBag.Message = "Your application description page.";
 
             return View();
@@ -40,31 +35,28 @@ namespace TableForDevelopers.Controllers
 
         public ActionResult Contact()
         {
+            CheckAuth();
             ViewBag.Message = "Your contact page.";
 
             return View();
         }
 
-        [HttpPost]
-        public async Task<ActionResult> Register(RegisterModel model)
+        private async Task<List<string>> LoadProjects()
         {
-            if (ModelState.IsValid)
+            List<string> projectNames = new List<string>();
+            using (ProjectContext context = new ProjectContext())
             {
-                ApplicationUser user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    foreach (string error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error);
-                    }
-                }
+                List<ProjectModel> projects = await context.Projects.ToListAsync<ProjectModel>();
+                foreach (var p in projects)
+                    projectNames.Add(p.ProjectName);
+
             }
-            return PartialView(model);
+            return projectNames;
+        }
+        private void CheckAuth()
+        {
+            ViewBag.IsAuth = HttpContext.User.Identity.IsAuthenticated; // аутентифицирован ли пользователь
+            ViewBag.Login = HttpContext.User.Identity.Name; // логин авторизованного пользователя
         }
     }
 }

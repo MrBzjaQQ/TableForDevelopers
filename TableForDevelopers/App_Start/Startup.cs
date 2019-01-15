@@ -21,5 +21,6 @@ namespace TableForDevelopers.App_Start
                 LoginPath = new PathString("/Account/Login"),
             });
         }
+
     }
 }

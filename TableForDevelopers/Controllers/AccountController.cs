@@ -38,7 +38,7 @@ namespace TableForDevelopers.Controllers
                     case "TeamLeader": { type = UserType.TeamLeader; break; }
 
                 }
-                ApplicationUser user = new ApplicationUser { Login = model.Login, UserName = model.Name,
+                ApplicationUser user = new ApplicationUser { UserName = model.Name,
                     Email = model.Email, Rights = type};
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -73,26 +73,41 @@ namespace TableForDevelopers.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginModel model, string returnUrl)
         {
+            if (string.IsNullOrEmpty(model.Email))
+                ModelState.AddModelError("", "Поле E-Mail пустое.");
+            if (string.IsNullOrEmpty(model.Password))
+                ModelState.AddModelError("", "Поле Password пустое.");
             if (ModelState.IsValid)
             {
-                ApplicationUser user = await UserManager.FindAsync(model.Login, model.Password);
+                PasswordVerificationResult result = PasswordVerificationResult.Failed;
+                ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
                 if (user == null)
                 {
-                    ModelState.AddModelError("ErrorMessage", "Неверный логин или пароль.");
+                    ModelState.AddModelError("", "Неверный email или пароль.");
                 }
                 else
                 {
-                    ClaimsIdentity claim = await UserManager.CreateIdentityAsync(user,
-                                            DefaultAuthenticationTypes.ApplicationCookie);
-                    AuthenticationManager.SignOut();
-                    AuthenticationManager.SignIn(new AuthenticationProperties
+                    result = UserManager.PasswordHasher.VerifyHashedPassword(user.PasswordHash, model.Password);
+
+                    if (!(result == PasswordVerificationResult.Success))
                     {
-                        IsPersistent = true
-                    }, claim);
-                    if (String.IsNullOrEmpty(returnUrl))
-                        return RedirectToAction("Index", "Home");
-                    return Redirect(returnUrl);
+                        ModelState.AddModelError("", "Неверный email или пароль.");
+                    }
+                    else
+                    {
+
+                        ClaimsIdentity ident = await UserManager
+                                                        .CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);  //  DefaultAuthenticationTypes.ApplicationCookie is used whenn working with individual accounts
+
+                        AuthenticationManager.SignOut();
+
+                        AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = true }, ident);
+                        if (returnUrl == null)
+                            return RedirectToAction("Index", "Home");
+                        return Redirect(returnUrl);
+                    }
                 }
+
             }
             ViewBag.returnUrl = returnUrl;
             return PartialView(model);

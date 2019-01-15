@@ -13,45 +13,11 @@ namespace TableForDevelopers.Controllers
         // GET: Table
         public ActionResult Table(string project = "")
         {
+            CheckAuth();
             List<List<CardModel>> table = new List<List<CardModel>>();
             if (ModelState.IsValid)
             {
-                using (CardContext context = new CardContext())
-                {
-                    List<CardModel> cards;
-                    if (project == string.Empty)
-                        cards = context.Cards.ToList();
-                    else
-                        cards = context.Cards.Where(i => i.Project == project).ToList();
-                    Stack<CardModel> backlog = new Stack<CardModel>(cards.Where(i => i.Status == CardStatus.Backlog.ToString()));
-                    Stack<CardModel> analysis = new Stack<CardModel>(cards.Where(i => i.Status == CardStatus.Analysis.ToString()));
-                    Stack<CardModel> developing = new Stack<CardModel>(cards.Where(i => i.Status == CardStatus.Developing.ToString()));
-                    Stack<CardModel> testing = new Stack<CardModel>(cards.Where(i => i.Status == CardStatus.Testing.ToString()));
-                    Stack<CardModel> done = new Stack<CardModel>(cards.Where(i => i.Status == CardStatus.Done.ToString()));
-                    int counter = cards.Count;
-                    do
-                    {
-                        List<CardModel> row = new List<CardModel>();
-                        if (backlog.Any())
-                            row.Add(backlog.Pop());
-                        else row.Add(null);
-                        if (analysis.Any())
-                            row.Add(analysis.Pop());
-                        else row.Add(null);
-                        if (developing.Any())
-                            row.Add(developing.Pop());
-                        else row.Add(null);
-                        if (testing.Any())
-                            row.Add(testing.Pop());
-                        else row.Add(null);
-                        if (done.Any())
-                            row.Add(done.Pop());
-                        else row.Add(null);
-                        table.Add(row);
-                        counter -= 5;
-
-                    } while (counter > 0);
-                }
+                table = LoadTable();
             }
             return PartialView(table);
         }
@@ -143,6 +109,54 @@ namespace TableForDevelopers.Controllers
                     prjs.Add(p.ProjectName);
                 ViewBag.Projects = prjs;
             }
+        }
+
+        private List<List<CardModel>> LoadTable(string project = "")
+        {
+            List<List<CardModel>> table = new List<List<CardModel>>();
+            using (CardContext context = new CardContext())
+            {
+                List<CardModel> cards;
+                if (project == string.Empty)
+                    cards = context.Cards.ToList();
+                else
+                    cards = context.Cards.Where(i => i.Project == project).ToList();
+                Stack<CardModel> backlog = new Stack<CardModel>(cards.Where(i => i.Status == CardStatus.Backlog.ToString()));
+                Stack<CardModel> analysis = new Stack<CardModel>(cards.Where(i => i.Status == CardStatus.Analysis.ToString()));
+                Stack<CardModel> developing = new Stack<CardModel>(cards.Where(i => i.Status == CardStatus.Developing.ToString()));
+                Stack<CardModel> testing = new Stack<CardModel>(cards.Where(i => i.Status == CardStatus.Testing.ToString()));
+                Stack<CardModel> done = new Stack<CardModel>(cards.Where(i => i.Status == CardStatus.Done.ToString()));
+                int counter = cards.Count;
+                do
+                {
+                    List<CardModel> row = new List<CardModel>();
+                    if (backlog.Any())
+                        row.Add(backlog.Pop());
+                    else row.Add(null);
+                    if (analysis.Any())
+                        row.Add(analysis.Pop());
+                    else row.Add(null);
+                    if (developing.Any())
+                        row.Add(developing.Pop());
+                    else row.Add(null);
+                    if (testing.Any())
+                        row.Add(testing.Pop());
+                    else row.Add(null);
+                    if (done.Any())
+                        row.Add(done.Pop());
+                    else row.Add(null);
+                    table.Add(row);
+                    counter -= 5;
+
+                } while (counter > 0);
+                
+            }
+            return table;
+        }
+        private void CheckAuth()
+        {
+            ViewBag.IsAuth = HttpContext.User.Identity.IsAuthenticated; // аутентифицирован ли пользователь
+            ViewBag.Login = HttpContext.User.Identity.Name; // логин авторизованного пользователя
         }
     }
 }

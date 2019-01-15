@@ -8,7 +8,6 @@ namespace TableForDevelopers.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public string Login { get; set; }
         public UserType Rights { get; set; }
         public ApplicationUser()
         {
