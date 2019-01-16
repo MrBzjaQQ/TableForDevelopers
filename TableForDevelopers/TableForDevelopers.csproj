@@ -192,6 +192,8 @@
     </Compile>
     <Compile Include="Models\ApplicationCardManager.cs" />
     <Compile Include="Models\ApplicationContext.cs" />
+    <Compile Include="Models\ApplicationRole.cs" />
+    <Compile Include="Models\ApplicationRoleManager.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\ApplicationUserManager.cs" />
     <Compile Include="Models\CardContext.cs" />
@@ -245,7 +247,7 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
-    <None Include="Properties\PublishProfiles\TaskDesk - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\TableForDevelopers - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

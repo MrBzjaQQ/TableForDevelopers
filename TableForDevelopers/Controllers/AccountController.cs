@@ -102,6 +102,7 @@ namespace TableForDevelopers.Controllers
                         AuthenticationManager.SignOut();
 
                         AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = true }, ident);
+                        HttpContext.Cache.Insert("UserType", user.Rights.ToString());
                         if (returnUrl == null)
                             return RedirectToAction("Index", "Home");
                         return Redirect(returnUrl);

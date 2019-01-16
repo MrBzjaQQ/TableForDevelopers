@@ -1,14 +1,21 @@
 ﻿@model List<List<TableForDevelopers.Models.CardModel>>
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @Scripts.Render("~/bundles/tableScripts")
 <div>
+    @if(ViewBag.IsAuth)
+    {
+    if(ViewBag.UserType == "TeamLeader")
+    {
     <ul class="nav">
         <li class="nav-item">
             @Html.ActionLink("Создать карточку", "CreateCard", "Table", null, new {@class = "nav-link CreateCard"})
         </li>
     </ul>
+    }
+    }
     <table class="table">
         <thead>
             <tr>

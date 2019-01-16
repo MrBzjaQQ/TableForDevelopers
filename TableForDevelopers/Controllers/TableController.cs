@@ -157,6 +157,7 @@ namespace TableForDevelopers.Controllers
         {
             ViewBag.IsAuth = HttpContext.User.Identity.IsAuthenticated; // аутентифицирован ли пользователь
             ViewBag.Login = HttpContext.User.Identity.Name; // логин авторизованного пользователя
+            ViewBag.UserType = HttpContext.Cache["UserRights"];
         }
     }
 }

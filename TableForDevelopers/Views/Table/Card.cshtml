@@ -4,7 +4,7 @@
 @Html.AntiForgeryToken()
 <div class="modal-content">
     <div class="modal-header">
-        <h3 class="modal-title">Изменить задачу</h3>
+        <h3 class="modal-title">Задача:</h3>
         @Html.ValidationSummary(false)
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times</span>
@@ -34,8 +34,14 @@
     </div>
     <div class="modal-footer">
         <button id="CancelEditButton" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+        @if(ViewBag.IsAuth)
+        {
+        if(ViewBag.UserType == "TeamLeader")
+        {
         <button id="DeleteCardButton" type="submit" class="btn btn-danger" name="buttonType" value="delete">Удалить</button>
         <button id="AcceptEditButton" type="submit" class="btn btn-primary" name="buttonType" value="edit">Изменить</button>
+        }
+        }
     </div>
 </div>
 }
