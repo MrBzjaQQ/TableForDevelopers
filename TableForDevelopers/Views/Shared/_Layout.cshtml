@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{
+ViewBag.Page = "_Layout";
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -31,17 +34,25 @@
                     <li class="nav-item">@Html.ActionLink("Доска", "Table", "Table", null, new {@class = "nav-link active"})</li>
                     <li class="nav-item">@Html.ActionLink("О программе", "About", "Home", null, new {@class = "nav-link"})</li>
                     <li class="nav-item">@Html.ActionLink("Контакт", "Contact", "Home", null, new {@class = "nav-link"})</li>
-                    @if(!ViewBag.IsAuth)
+                    @if(ViewBag != null && ViewBag.IsAuth != null)
                     {
-                    <li class="nav-item">@Html.ActionLink("Войти", "Login", "Account", null, new { @class = "nav-link login"})</li>
-                    <li class="nav-item">@Html.ActionLink("Регистрация", "Register", "Account", null, new { @class = "nav-link register"})</li>
-                
+                    if(!ViewBag.IsAuth)
+                    {
+                    <li class="nav-item">@Html.ActionLink("Войти", "Login", "Account", null, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Регистрация", "Register", "Account", null, new { @class = "nav-link" })</li>
+
                     }
                     else
                     {
                             <li>@Html.ActionLink("Выйти", "Logout", "Account", null, new {@class = "nav-link"})</li>
                     }
-                    </ul>
+                    }
+                    else
+                    {
+                    <li class="nav-item">@Html.ActionLink("Войти", "Login", "Account", null, new { @class = "nav-link"})</li>
+                    <li class="nav-item">@Html.ActionLink("Регистрация", "Register", "Account", null, new { @class = "nav-link"})</li>
+                    }
+                </ul>
             </div>
         </div>
     </nav>
@@ -53,10 +64,10 @@
         
         
     </div>
-    <div style="bottom:0;position: fixed; width:100%;">
-        <hr style="width:60%;"/>
+    <div style="bottom: 0; position: fixed; width: 100%;">
+        <hr style="width: 60%;" />
         <footer>
-            @if(ViewBag.IsAuth)
+            @if(ViewBag.IsAuth != null && ViewBag.IsAuth)
             {
                 <p style="padding: 0px 0px 0px 20%">Вы вошли как: @ViewBag.Login</p>
             }

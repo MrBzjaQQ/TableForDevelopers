@@ -11,14 +11,18 @@
             @Html.ActionLink("Удалить проект", "RemoveProject", "Project", null, new {@class = "nav-link RemoveProject"})
         </li>
     </ul>
-    <h3>Текущие проекты:</h3>
     @if(Model != null && Model.Any())
     {
+    <h3>Текущие проекты:</h3>
     <ul class="list-group list-group-flush">
     @foreach(var p in Model)
     {
         @Html.ActionLink(p, "Table", "Table", new {project = p}, new {@class = "list-group-item"})
     }
      </ul>
+    }
+    else
+    {
+    <h4>На данный момент проектов нет. Создайте проект.</h4>
     }
 </div>

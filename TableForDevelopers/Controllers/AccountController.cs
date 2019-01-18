@@ -118,5 +118,9 @@ namespace TableForDevelopers.Controllers
             AuthenticationManager.SignOut();
             return RedirectToAction("Login");
         }
+        public ActionResult TwoFactorAuth()
+        {
+            return PartialView();
+        }
     }
 }
