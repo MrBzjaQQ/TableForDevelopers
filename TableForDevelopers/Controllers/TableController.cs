@@ -23,6 +23,7 @@ namespace TableForDevelopers.Controllers
         }
         public ActionResult Card(int id)
         {
+            CheckAuth();
             CardModel card = new CardModel();
             using (CardContext cards = new CardContext())
             {
@@ -34,6 +35,7 @@ namespace TableForDevelopers.Controllers
         }
         public ActionResult CreateCard()
         {
+            CheckAuth();
             FindProjects();
             FindDevelopers();
             return PartialView();
@@ -41,6 +43,7 @@ namespace TableForDevelopers.Controllers
         [HttpPost]
         public ActionResult CreateCard(CardModel model)
         {
+            CheckAuth();
             CardModel card = new CardModel();
             card.Project = string.Empty;
             if (ModelState.IsValid)
@@ -64,7 +67,8 @@ namespace TableForDevelopers.Controllers
         [HttpPost]
         public ActionResult Card(CardModel model, int id, string buttonType)
         {
-            if(buttonType == "delete")
+            CheckAuth();
+            if (buttonType == "delete")
             {
                 using (CardContext cards = new CardContext())
                 {
@@ -113,6 +117,7 @@ namespace TableForDevelopers.Controllers
 
         private List<List<CardModel>> LoadTable(string project = "")
         {
+            CheckAuth();
             List<List<CardModel>> table = new List<List<CardModel>>();
             using (CardContext context = new CardContext())
             {
@@ -129,24 +134,40 @@ namespace TableForDevelopers.Controllers
                 int counter = cards.Count;
                 do
                 {
+                    int cardsTaken = 0;
                     List<CardModel> row = new List<CardModel>();
                     if (backlog.Any())
+                    {
                         row.Add(backlog.Pop());
+                        cardsTaken++;
+                    }
                     else row.Add(null);
                     if (analysis.Any())
+                    {
                         row.Add(analysis.Pop());
+                        cardsTaken++;
+                    }
                     else row.Add(null);
                     if (developing.Any())
+                    {
                         row.Add(developing.Pop());
+                        cardsTaken++;
+                    }
                     else row.Add(null);
                     if (testing.Any())
+                    {
                         row.Add(testing.Pop());
+                        cardsTaken++;
+                    }
                     else row.Add(null);
                     if (done.Any())
+                    {
                         row.Add(done.Pop());
+                        cardsTaken++;
+                    }
                     else row.Add(null);
                     table.Add(row);
-                    counter -= 5;
+                    counter -= cardsTaken;
 
                 } while (counter > 0);
                 
@@ -157,7 +178,7 @@ namespace TableForDevelopers.Controllers
         {
             ViewBag.IsAuth = HttpContext.User.Identity.IsAuthenticated; // аутентифицирован ли пользователь
             ViewBag.Login = HttpContext.User.Identity.Name; // логин авторизованного пользователя
-            ViewBag.UserType = HttpContext.Cache["UserRights"];
+            ViewBag.UserType = HttpContext.Cache["UserType"];
         }
     }
 }

@@ -3,6 +3,7 @@ using Owin;
 using TableForDevelopers.Models;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.AspNet.Identity;
+using System.Data.Entity.Migrations;
 
 [assembly: OwinStartup(typeof(TableForDevelopers.App_Start.Startup))]
 
@@ -15,7 +16,6 @@ namespace TableForDevelopers.App_Start
             // настраиваем контекст и менеджер
             app.CreatePerOwinContext<ApplicationContext>(ApplicationContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
-            app.CreatePerOwinContext<ApplicationRoleManager>(ApplicationRoleManager.Create);
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,

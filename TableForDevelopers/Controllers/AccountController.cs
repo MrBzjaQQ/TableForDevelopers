@@ -14,13 +14,6 @@ namespace TableForDevelopers.Controllers
 {
     public class AccountController : Controller
     {
-        private ApplicationUserManager UserManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-        }
         public ActionResult Register()
         {
             return PartialView();
@@ -97,7 +90,7 @@ namespace TableForDevelopers.Controllers
                     {
 
                         ClaimsIdentity ident = await UserManager
-                                                        .CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);  //  DefaultAuthenticationTypes.ApplicationCookie is used whenn working with individual accounts
+                                                         .CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);  //  DefaultAuthenticationTypes.ApplicationCookie is used whenn working with individual accounts
 
                         AuthenticationManager.SignOut();
 
@@ -118,9 +111,18 @@ namespace TableForDevelopers.Controllers
             AuthenticationManager.SignOut();
             return RedirectToAction("Login");
         }
+        //TODO
         public ActionResult TwoFactorAuth()
         {
             return PartialView();
+        }
+
+        private ApplicationUserManager UserManager
+        {
+            get
+            {
+                return HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
         }
     }
 }

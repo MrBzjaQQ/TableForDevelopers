@@ -36,7 +36,7 @@
         <button id="CancelEditButton" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
         @if(ViewBag.IsAuth)
         {
-        if(ViewBag.UserType == "TeamLeader")
+        if(ViewBag.UserType == "TeamLeader" || Model.AppointedDeveloper == ViewBag.Login)
         {
         <button id="DeleteCardButton" type="submit" class="btn btn-danger" name="buttonType" value="delete">Удалить</button>
         <button id="AcceptEditButton" type="submit" class="btn btn-success" name="buttonType" value="edit">Изменить</button>

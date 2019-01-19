@@ -5,9 +5,9 @@
 }
 @Scripts.Render("~/bundles/tableScripts")
 <div>
-    @if(ViewBag.IsAuth)
+    @if(ViewBag.IsAuth != null)
     {
-    if(ViewBag.UserType == "TeamLeader")
+    if(ViewBag.IsAuth && ViewBag.UserType == "TeamLeader")
     {
     <ul class="nav">
         <li class="nav-item">

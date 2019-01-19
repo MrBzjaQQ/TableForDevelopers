@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System.Data.Entity;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TableForDevelopers.Controllers
 {
@@ -24,7 +25,6 @@ namespace TableForDevelopers.Controllers
             List<string> projectNames = await LoadProjects();
             return View(projectNames);
         }
-
         public ActionResult About()
         {
             CheckAuth();
@@ -47,8 +47,12 @@ namespace TableForDevelopers.Controllers
             using (ProjectContext context = new ProjectContext())
             {
                 List<ProjectModel> projects = await context.Projects.ToListAsync<ProjectModel>();
-                foreach (var p in projects)
-                    projectNames.Add(p.ProjectName);
+                if (ViewBag.UserType != "Customer")
+                    foreach (var p in projects)
+                        projectNames.Add(p.ProjectName);
+                else
+                    foreach (var p in projects.Where(i => i.CustomerName == ViewBag.Login))
+                        projectNames.Add(p.ProjectName);
 
             }
             return projectNames;
@@ -57,7 +61,7 @@ namespace TableForDevelopers.Controllers
         {
             ViewBag.IsAuth = HttpContext.User.Identity.IsAuthenticated; // аутентифицирован ли пользователь
             ViewBag.Login = HttpContext.User.Identity.Name; // логин авторизованного пользователя
-            ViewBag.UserType = HttpContext.Cache["UserRights"];
+            ViewBag.UserType = HttpContext.Cache["UserType"];
         }
     }
 }
