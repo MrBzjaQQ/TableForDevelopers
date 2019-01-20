@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
+using TableForDevelopers.App_Start;
 
 namespace TableForDevelopers.Models
 {
@@ -10,6 +11,9 @@ namespace TableForDevelopers.Models
         public ApplicationUserManager(IUserStore<ApplicationUser> store)
             : base(store)
         {
+            var dataProtectionProvider = Startup.DataProtectionProvider;
+            this.UserTokenProvider =
+                    new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
         }
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options,
                                                 IOwinContext context)

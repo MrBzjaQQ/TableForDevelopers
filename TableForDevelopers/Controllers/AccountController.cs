@@ -43,8 +43,8 @@ namespace TableForDevelopers.Controllers
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    var provider = new DpapiDataProtectionProvider("TableForDevelopers");
-                    UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
+                    //var provider = new DpapiDataProtectionProvider("TableForDevelopers");
+                    //UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
                     // генерируем токен для подтверждения регистрации
                     var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // создаем ссылку для подтверждения
@@ -155,8 +155,8 @@ namespace TableForDevelopers.Controllers
                 {
                     return View("ForgotPasswordConfirmation");
                 }
-                var provider = new DpapiDataProtectionProvider("TableForDevelopers");
-                UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
+                //var provider = new DpapiDataProtectionProvider("TableForDevelopers");
+                //UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
                 string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                 var callbackUrl = Url.Action("PasswordRecovery", "Account",
                     new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);

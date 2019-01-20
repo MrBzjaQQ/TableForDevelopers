@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin.Security.DataProtection;
 
 [assembly: OwinStartup(typeof(TableForDevelopers.App_Start.Startup))]
 
@@ -14,9 +15,11 @@ namespace TableForDevelopers.App_Start
 {
     public class Startup
     {
+        internal static IDataProtectionProvider DataProtectionProvider { get; private set; }
         public void Configuration(IAppBuilder app)
         {
             // настраиваем контекст и менеджер
+            DataProtectionProvider = app.GetDataProtectionProvider();
             app.CreatePerOwinContext(ApplicationContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
 
