@@ -15,6 +15,8 @@ ViewBag.Page = "_Layout";
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <!-- Put this script tag to the <head> of your page -->
+    <script type="text/javascript" src="https://vk.com/js/api/share.js?95" charset="windows-1251"></script>
 </head>
 <body>
     @Scripts.Render("~/bundles/jquery")
@@ -69,11 +71,16 @@ ViewBag.Page = "_Layout";
     <div style="bottom: 0; position: fixed; width: 100%;">
         <hr style="width: 60%;" />
         <footer>
-            @if(ViewBag.IsAuth != null && ViewBag.IsAuth)
-            {
+                @if(ViewBag.IsAuth != null && ViewBag.IsAuth)
+                {
                 <p style="padding: 0px 0px 0px 20%">Вы вошли как: @ViewBag.Login</p>
-            }
-            <p style="padding: 0px 0px 0px 20%">&copy; @DateTime.Now.Year – Кафедра <a href="http://asoiu.com/">АСОИУ</a></p>
+                }
+                <p style="padding: 0px 0px 0px 20%">&copy; @DateTime.Now.Year – Кафедра <a href="http://asoiu.com/">АСОИУ</a></p>
+            <div style="bottom: 2%; position:fixed; padding-left: 74%">
+                <script type="text/javascript"><!--
+    document.write(VK.Share.button(false, { type: "round", text: "Поделиться" }));
+    --></script>
+            </div>
         </footer>
     </div>
 </body>
