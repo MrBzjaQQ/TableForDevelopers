@@ -9,9 +9,12 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System.Security.Claims;
 using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.DataProtection;
+using TableForDevelopers.App_Start;
 
 namespace TableForDevelopers.Controllers
 {
+    [RequireHttps]
     public class AccountController : Controller
     {
         public ActionResult Register()
@@ -24,19 +27,35 @@ namespace TableForDevelopers.Controllers
             if (ModelState.IsValid)
             {
                 UserType type = UserType.Customer;
-                switch(model.UserType)
+                switch (model.UserType)
                 {
                     case "Developer": { type = UserType.Developer; break; }
                     case "Customer": { type = UserType.Customer; break; }
                     case "TeamLeader": { type = UserType.TeamLeader; break; }
 
                 }
-                ApplicationUser user = new ApplicationUser { UserName = model.Name,
-                    Email = model.Email, Rights = type};
+                ApplicationUser user = new ApplicationUser
+                {
+                    UserName = model.Name,
+                    Email = model.Email,
+                    Rights = type
+                };
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    var provider = new DpapiDataProtectionProvider("TableForDevelopers");
+                    UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
+                    // генерируем токен для подтверждения регистрации
+                    var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    // создаем ссылку для подтверждения
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code },
+                               protocol: Request.Url.Scheme);
+                    // отправка письма
+                    await UserManager.SendEmailAsync(user.Id, "Подтверждение электронной почты",
+                               "Для завершения регистрации перейдите по ссылке:: <a href=\""
+                                                               + callbackUrl + "\">завершить регистрацию</a>" +
+                                                               "<p>Это письмо сгенерировано в учебных целях(!), автоматически и отвечать на него не нужно.</p>");
+                    return RedirectToAction("DisplayEmail", "Account");
                 }
                 else
                 {
@@ -47,6 +66,20 @@ namespace TableForDevelopers.Controllers
                 }
             }
             return PartialView(model);
+        }
+        public ActionResult DisplayEmail()
+        {
+            return PartialView();
+        }
+        public ActionResult ConfirmEmail(string UserId, string code)
+        {
+            using (var context = ApplicationContext.Create())
+            {
+                var user = context.Users.Where(i => i.Id == UserId).ToList().FirstOrDefault();
+                user.EmailConfirmed = true;
+                context.SaveChanges();
+            }
+            return PartialView();
         }
         private IAuthenticationManager AuthenticationManager
         {
@@ -121,7 +154,9 @@ namespace TableForDevelopers.Controllers
         {
             get
             {
-                return HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                var context = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                context.EmailService = new EmailService();
+                return context;
             }
         }
     }

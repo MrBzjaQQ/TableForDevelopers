@@ -8,6 +8,7 @@ using TableForDevelopers.Models;
 
 namespace TableForDevelopers.Controllers
 {
+    [RequireHttps]
     public class TableController : Controller
     {
         // GET: Table

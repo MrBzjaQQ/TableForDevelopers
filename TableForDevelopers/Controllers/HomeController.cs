@@ -10,6 +10,7 @@ using System.Linq;
 
 namespace TableForDevelopers.Controllers
 {
+    [RequireHttps]
     public class HomeController : Controller
     {
         private ApplicationUserManager UserManager

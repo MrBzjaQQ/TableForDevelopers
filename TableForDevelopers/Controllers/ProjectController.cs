@@ -8,6 +8,7 @@ using System.Data.Entity;
 
 namespace TableForDevelopers.Controllers
 {
+    [RequireHttps]
     public class ProjectController : Controller
     {
         // GET: Project
