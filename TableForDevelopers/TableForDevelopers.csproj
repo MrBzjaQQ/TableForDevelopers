@@ -202,7 +202,9 @@
     <Compile Include="Models\CardContext.cs" />
     <Compile Include="Models\CardModel.cs" />
     <Compile Include="Models\CSSClassModel.cs" />
+    <Compile Include="Models\ForgotPasswordConfirmationModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\PasswordRecoveryModel.cs" />
     <Compile Include="Models\ProjectContext.cs" />
     <Compile Include="Models\ProjectModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
@@ -299,6 +301,10 @@
     <Content Include="Views\Table\CreateCard.cshtml" />
     <Content Include="Views\Account\DisplayEmail.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\PasswordChanged.cshtml" />
+    <Content Include="Views\Account\PasswordRecovery.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

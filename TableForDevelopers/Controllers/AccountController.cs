@@ -139,6 +139,63 @@ namespace TableForDevelopers.Controllers
             ViewBag.returnUrl = returnUrl;
             return PartialView(model);
         }
+        public ActionResult ForgotPassword()
+        {
+            return PartialView();
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ForgotPassword(ForgotPasswordConfirmationModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await UserManager.FindByEmailAsync(model.Email);
+                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                {
+                    return View("ForgotPasswordConfirmation");
+                }
+                var provider = new DpapiDataProtectionProvider("TableForDevelopers");
+                UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("PasswordRecovery", "Account",
+                    new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                await UserManager.SendEmailAsync(user.Id, "Сброс пароля",
+                    "Для сброса пароля, перейдите по ссылке <a href=\"" + callbackUrl + "\">сбросить</a>" +
+                    "<p> Это письмо сгенерировано в учебных целях(!), автоматически и отвечать на него не нужно.</p>");
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
+            }
+            return PartialView(model);
+        }
+        public ActionResult ForgotPasswordConfirmation()
+        {
+            return PartialView();
+        }
+        public ActionResult PasswordRecovery()
+        {
+            return PartialView();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PasswordRecovery(string UserId, PasswordRecoveryModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                using (var context = ApplicationContext.Create())
+                {
+                    var user = context.Users.Where(i => i.Id == UserId).FirstOrDefault();
+                    if (user == null)
+                        return RedirectToAction("Index", "Home");
+                    user.PasswordHash = UserManager.PasswordHasher.HashPassword(model.Password);
+                    context.SaveChanges();
+                }
+            }
+            return RedirectToAction("PasswordChanged", "Account");
+        }
+        public ActionResult PasswordChanged()
+        {
+            return PartialView();
+        }
         public ActionResult Logout()
         {
             AuthenticationManager.SignOut();
