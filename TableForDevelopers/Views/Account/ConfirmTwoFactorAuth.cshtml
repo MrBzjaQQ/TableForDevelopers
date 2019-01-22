@@ -1,0 +1,36 @@
+﻿@model TableForDevelopers.Models.TwoFactorAuthModel
+@{
+    ViewBag.Title = "ConfirmAuth";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm())
+{
+@Html.AntiForgeryToken()
+<div>
+    <div class="modal-header">
+        <h3 class="modal-title">Введите код подтверждения</h3>
+        @Html.ValidationSummary(false)
+<!--        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times</span>
+        </button>-->
+    </div>
+    <div class="modal-body">
+         <div class="form-group">
+            <label for="nameOfProject">Код:</label>
+            @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control", @id="nameOfProject", @placeholder="123456"}, })
+        </div>
+    </div>
+    <div class="modal-footer">
+        <!--<input type="submit" class="btn btn-success" value="Подтвердить" />-->
+        @Html.ActionLink("Подтвердить", "ConfirmTwoFactorAuth", "Account", new {UserId = ViewBag.UserId, ParentAction = ViewBag.ParentAction}, new {@id="submit", @class="btn btn-success", value="Подтвердить"})
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $("#submit").click(function () {
+                document.forms[0].submit();
+                return false;
+            });
+        });
+    </script>
+</div>
+}

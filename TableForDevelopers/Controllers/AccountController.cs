@@ -24,22 +24,29 @@ namespace TableForDevelopers.Controllers
         [HttpPost]
         public async Task<ActionResult> Register(RegisterModel model)
         {
+            if (UserManager.Users.Where(i => i.Email == model.Email).FirstOrDefault() != null)
+            {
+                ModelState.AddModelError("", "Данная почта уже используется");
+                return PartialView(model);
+            }
             if (ModelState.IsValid)
             {
-                UserType type = UserType.Customer;
+                UserType rights = UserType.Customer;
                 switch (model.UserType)
                 {
-                    case "Developer": { type = UserType.Developer; break; }
-                    case "Customer": { type = UserType.Customer; break; }
-                    case "TeamLeader": { type = UserType.TeamLeader; break; }
+                    case "Developer": { rights = UserType.Developer; break; }
+                    case "Customer": { rights = UserType.Customer; break; }
+                    case "TeamLeader": { rights = UserType.TeamLeader; break; }
 
                 }
                 ApplicationUser user = new ApplicationUser
                 {
                     UserName = model.Name,
                     Email = model.Email,
-                    Rights = type
+                    PhoneNumber = model.PhoneNumber,
+                    Rights = rights
                 };
+                
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -89,9 +96,18 @@ namespace TableForDevelopers.Controllers
             }
         }
 
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login(string UserId)
         {
-            ViewBag.returnUrl = returnUrl;
+            if (UserId != null)
+            {
+                var user = UserManager.FindById(UserId);
+                ClaimsIdentity ident = UserManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);  //  DefaultAuthenticationTypes.ApplicationCookie is used whenn working with individual accounts
+                AuthenticationManager.SignOut();
+                AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = true }, ident);
+                HttpContext.Cache.Insert("UserType", user.Rights.ToString());
+                HttpContext.Cache.Insert("UserId", user.Id);
+                return RedirectToAction("Index", "Home");
+            }
             return PartialView();
         }
 
@@ -100,9 +116,15 @@ namespace TableForDevelopers.Controllers
         public async Task<ActionResult> Login(LoginModel model, string returnUrl)
         {
             if (string.IsNullOrEmpty(model.Email))
+            {
                 ModelState.AddModelError("", "Поле E-Mail пустое.");
+                return PartialView(model);
+            }
             if (string.IsNullOrEmpty(model.Password))
+            {
                 ModelState.AddModelError("", "Поле Password пустое.");
+                return PartialView(model);
+            }
             if (ModelState.IsValid)
             {
                 PasswordVerificationResult result = PasswordVerificationResult.Failed;
@@ -121,14 +143,18 @@ namespace TableForDevelopers.Controllers
                     }
                     else
                     {
-
+                        if(user.PhoneNumberConfirmed)
+                        {
+                            if (await SendSmsVerificationCode(user.Id))
+                                return RedirectToAction("ConfirmTwoFactorAuth", "Account", new {UserId = user.Id, ParentAction = "Login"});
+                        }
                         ClaimsIdentity ident = await UserManager
                                                          .CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);  //  DefaultAuthenticationTypes.ApplicationCookie is used whenn working with individual accounts
-
                         AuthenticationManager.SignOut();
 
                         AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = true }, ident);
                         HttpContext.Cache.Insert("UserType", user.Rights.ToString());
+                        HttpContext.Cache.Insert("UserId", user.Id);
                         if (returnUrl == null)
                             return RedirectToAction("Index", "Home");
                         return Redirect(returnUrl);
@@ -175,6 +201,62 @@ namespace TableForDevelopers.Controllers
         {
             return PartialView();
         }
+        public async Task<ActionResult> PasswordReset(string UserId)
+        {
+            CheckAuth();
+            var user = await UserManager.FindByIdAsync(UserId);
+            string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+            var callbackUrl = Url.Action("PasswordRecovery", "Account",
+                new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+            await UserManager.SendEmailAsync(user.Id, "Сброс пароля",
+                "Для сброса пароля, перейдите по ссылке <a href=\"" + callbackUrl + "\">сбросить</a>" +
+                "<p> Это письмо сгенерировано в учебных целях(!), автоматически и отвечать на него не нужно.</p>");
+            AuthenticationManager.SignOut();
+            return RedirectToAction("ForgotPasswordConfirmation", "Account");
+        }
+        public async Task<ActionResult> EnableTwoFactorAuth(string UserId)
+        {
+            var user = await UserManager.FindByIdAsync(UserId);
+            if (await SendSmsVerificationCode(UserId))
+            {
+                return RedirectToAction("ConfirmTwoFactorAuth", "Account", new { UserId = UserId, ParentAction = "AccountSettings" });
+            }
+            return PartialView();
+        }
+        public ActionResult ConfirmTwoFactorAuth(string UserId, string ParentAction)
+        {
+            ViewBag.UserId = UserId;
+            ViewBag.ParentAction = ParentAction;
+            return PartialView();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ConfirmTwoFactorAuth(string UserId, string ParentAction, TwoFactorAuthModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await UserManager.FindByIdAsync(UserId);
+
+            var result = await UserManager.ChangePhoneNumberAsync(UserId, user.PhoneNumber, model.Code);
+            if (result.Succeeded)
+            {
+                return RedirectToAction(ParentAction, "Account", new { UserId = user.Id });
+            }
+            ModelState.AddModelError("", "Failed to verify phone");
+            return PartialView();
+        }
+        public ActionResult DisableTwoFactorAuth(string UserId)
+        {
+            using (var context = ApplicationContext.Create())
+            {
+                var user = context.Users.Where(i => i.Id == UserId).First();
+                user.PhoneNumberConfirmed = false;
+                context.SaveChanges();
+            }
+            return RedirectToAction("AccountSettings", "Account", new { UserId = UserId });
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult PasswordRecovery(string UserId, PasswordRecoveryModel model)
@@ -206,15 +288,45 @@ namespace TableForDevelopers.Controllers
         {
             return PartialView();
         }
-
+        public ActionResult AccountSettings(string UserId)
+        {
+            CheckAuth();
+            var user = UserManager.FindById(UserId);
+            ViewBag.IsTwoFactorEnabled = user.PhoneNumberConfirmed;
+            return PartialView();
+        }
+        public async Task<bool> SendSmsVerificationCode(string UserId)
+        {
+            var user = await UserManager.FindByIdAsync(UserId);
+            var code = await UserManager.GenerateChangePhoneNumberTokenAsync(UserId, user.PhoneNumber);
+            if (UserManager.SmsService != null)
+            {
+                var message = new IdentityMessage
+                {
+                    Destination = user.PhoneNumber,
+                    Body = "Your security code is: " + code
+                };
+                await UserManager.SmsService.SendAsync(message);
+                return true;
+            }
+            return false;
+        }
         private ApplicationUserManager UserManager
         {
             get
             {
                 var context = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
                 context.EmailService = new EmailService();
+                context.SmsService = new SmsService();
                 return context;
             }
+        }
+        private void CheckAuth()
+        {
+            ViewBag.IsAuth = HttpContext.User.Identity.IsAuthenticated; // аутентифицирован ли пользователь
+            ViewBag.Login = HttpContext.User.Identity.Name; // логин авторизованного пользователя
+            ViewBag.UserType = HttpContext.Cache["UserType"];
+            ViewBag.UserId = HttpContext.Cache["UserId"];
         }
     }
 }

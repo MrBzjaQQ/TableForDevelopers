@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "Account Settings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using(Html.BeginForm())
+{
+@Html.AntiForgeryToken()
+    <div>
+        @Html.ValidationSummary(false)
+        <ul class="list-group">
+            <li class="list-group-item">@Html.ActionLink("Сброс пароля", "PasswordReset", "Account", new {UserId = ViewBag.UserId}, null)</li>
+            @if(ViewBag.IsTwoFactorEnabled)
+            {
+                <!--<li class="list-group-item">@Html.ActionLink("Отключить двухфакторную аутентификацию", "DisableTwoFactorAuth", "Account", new {UserId = ViewBag.UserId}, new {@class="DisableTwoFactorAuth"})</li>-->
+                <li class="list-group-item">@Html.ActionLink("Отключить двухфакторную аутентификацию", "DisableTwoFactorAuth", "Account", new {UserId = ViewBag.UserId}, null)</li>
+            }
+            else
+            {
+                <li class="list-group-item">@Html.ActionLink("Включить двухфакторную аутентификацию", "EnableTwoFactorAuth", "Account", new {UserId = ViewBag.UserId}, null)</li>
+                <!--<li class="list-group-item">@Html.ActionLink("Включить двухфакторную аутентификацию", "EnableTwoFactorAuth", "Account", new {UserId = ViewBag.UserId}, new {@class="EnableTwoFactorAuth"})</li>-->
+            }
+        </ul>
+    </div>
+}

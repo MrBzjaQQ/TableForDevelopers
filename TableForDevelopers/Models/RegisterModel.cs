@@ -10,13 +10,15 @@ namespace TableForDevelopers.Models
     {
 
         [Required]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Required]
         public string Name { get; set; }
 
-        public string LastName { get; set; }
-
+        [Required]
+        [DataType(DataType.PhoneNumber)]
+        public string PhoneNumber { get; set; }
         [Required]
         public string UserType { get; set; }
 

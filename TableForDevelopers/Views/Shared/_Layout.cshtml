@@ -48,6 +48,7 @@ ViewBag.Page = "_Layout";
                     }
                     else
                     {
+                            <li>@Html.ActionLink("Аккаунт", "AccountSettings", "Account", new {UserId = ViewBag.UserId}, new {@class = "nav-link"})</li>
                             <li>@Html.ActionLink("Выйти", "Logout", "Account", null, new {@class = "nav-link"})</li>
                     }
                     }

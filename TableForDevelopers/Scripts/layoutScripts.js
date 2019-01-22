@@ -54,3 +54,14 @@ $(function () {
         });
     });
 })
+$(function () {
+    $.ajaxSetup({ cache: false });
+    $(".EnableTwoFactorAuth").click(function (e) {
+
+        e.preventDefault();
+        $.get(this.href, function (data) {
+            $('#dialogContent').html(data);
+            $('#modDialog').modal('show');
+        });
+    });
+})
