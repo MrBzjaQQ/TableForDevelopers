@@ -225,12 +225,32 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="img\instruction\Account.PNG" />
+    <Content Include="img\instruction\Card1.PNG" />
+    <Content Include="img\instruction\Card2.PNG" />
+    <Content Include="img\instruction\ForgotPassword.PNG" />
+    <Content Include="img\instruction\ForgotPassword2.PNG" />
+    <Content Include="img\instruction\ForgotPassword3.PNG" />
+    <Content Include="img\instruction\ForgotPassword4.PNG" />
+    <Content Include="img\instruction\ForgotPassword5.PNG" />
+    <Content Include="img\instruction\Login1.PNG" />
+    <Content Include="img\instruction\Login2.PNG" />
+    <Content Include="img\instruction\Project1.PNG" />
+    <Content Include="img\instruction\Project2.PNG" />
+    <Content Include="img\instruction\Project3.PNG" />
+    <Content Include="img\instruction\Register.PNG" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="img\instruction\Register2.PNG" />
+    <Content Include="img\instruction\Register3.PNG" />
+    <Content Include="img\instruction\Register4.PNG" />
+    <Content Include="img\instruction\SecurityCode.jpg" />
+    <Content Include="img\instruction\Table.PNG" />
+    <Content Include="img\instruction\TwoFactorAuth.PNG" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />

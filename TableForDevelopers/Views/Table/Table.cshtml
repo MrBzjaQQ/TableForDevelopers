@@ -19,11 +19,11 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col" class="text-center">Backlog</th>
-                <th scope="col" class="text-center">Analyse</th>
-                <th scope="col" class="text-center">Developing</th>
-                <th scope="col" class="text-center">Testing</th>
-                <th scope="col" class="text-center">Done</th>
+                <th scope="col" class="text-center"style="width: 20%;">Backlog</th>
+                <th scope="col" class="text-center"style="width: 20%;">Analyse</th>
+                <th scope="col" class="text-center"style="width: 20%;">Developing</th>
+                <th scope="col" class="text-center"style="width: 20%;">Testing</th>
+                <th scope="col" class="text-center"style="width: 20%;">Done</th>
             </tr>
             @foreach(var row in Model)
             {
@@ -38,7 +38,7 @@
                             <h5 class="card-title">@card.Header</h5>
                         </div>
                         <div class="@card.CardBodyClass">
-                            @Html.ActionLink(card.Description, "Card", "Table", new { id = card.CardID }, new {@class = "aboutCard"})
+                            @Html.ActionLink(card.Description, "Card", "Table", new { id = card.CardID }, new {@class = "aboutCard"})<br />
                             Разработчик: @card.AppointedDeveloper
                         </div>
                     </div>

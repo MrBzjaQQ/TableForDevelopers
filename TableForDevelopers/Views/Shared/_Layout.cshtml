@@ -4,6 +4,7 @@ ViewBag.Page = "_Layout";
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="Ershov Ilya" href="https://vk.com/mrbzjaqq" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,8 +36,14 @@ ViewBag.Page = "_Layout";
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="navbar-nav">
+                    @if(ViewBag.IsAuth != null)
+                    {
+                    if(ViewBag.IsAuth)
+                    {
                     <li class="nav-item">@Html.ActionLink("Доска", "Table", "Table", null, new {@class = "nav-link active"})</li>
-                    <li class="nav-item">@Html.ActionLink("О программе", "About", "Home", null, new {@class = "nav-link"})</li>
+                    }
+                    }
+                    <li class="nav-item">@Html.ActionLink("О сайте", "About", "Home", null, new {@class = "nav-link"})</li>
                     <li class="nav-item">@Html.ActionLink("Контакт", "Contact", "Home", null, new {@class = "nav-link"})</li>
                     @if(ViewBag != null && ViewBag.IsAuth != null)
                     {
@@ -64,40 +71,45 @@ ViewBag.Page = "_Layout";
     <div id="modDialog" class="modal fade">
         <div id="dialogContent" class="modal-dialog"></div>
     </div>
-    <div class="container body-content">
+    <div style="padding-bottom: 80px" class="container body-content">
         @RenderBody()
         
-        <div style="bottom: 1%; position: fixed; right: 5%">
-        <!--LiveInternet counter-->
-        <script type="text/javascript">
-            document.write("<a href='//www.liveinternet.ru/click' " +
-                "target=_blank><img src='//counter.yadro.ru/hit?t28.6;r" +
-                escape(document.referrer) + ((typeof (screen) == "undefined") ? "" :
-                    ";s" + screen.width + "*" + screen.height + "*" + (screen.colorDepth ?
-                        screen.colorDepth : screen.pixelDepth)) + ";u" + escape(document.URL) +
-                ";h" + escape(document.title.substring(0, 150)) + ";" + Math.random() +
-                "' alt='' title='LiveInternet: показано количество просмотров и" +
-                " посетителей' " +
-                "border='0' width='88' height='120'\"><\/a>")
-        </script>
-        <!--/LiveInternet-->
-            </div>
-
-    </div>
-    <div style="bottom: 0; position: fixed; width: 100%;">
-        <hr style="width: 60%;" />
-        <footer>
-            @if(ViewBag.IsAuth != null && ViewBag.IsAuth)
-                {
-                <p style="padding: 0px 0px 0px 20%">Вы вошли как: @ViewBag.Login</p>
-            }
-                <p style="padding: 0px 0px 0px 20%">&copy; @DateTime.Now.Year – Кафедра <a href="http://asoiu.com/">АСОИУ</a></p>
-            <div style="bottom: 2%; position: fixed; padding-left: 74%">
+        <div style="bottom: 1%; position: fixed; right: 5%; padding-bottom:100px;">
+            <!--LiveInternet counter-->
+            <div style="margin-bottom: 5px;">
                 <script type="text/javascript"><!--
     document.write(VK.Share.button(false, { type: "round", text: "Поделиться" }));
     --></script>
             </div>
-        </footer>
+            <div>
+                <script type="text/javascript">
+                        document.write("<a href='//www.liveinternet.ru/click' " +
+                            "target=_blank><img src='//counter.yadro.ru/hit?t28.6;r" +
+                            escape(document.referrer) + ((typeof (screen) == "undefined") ? "" :
+                                ";s" + screen.width + "*" + screen.height + "*" + (screen.colorDepth ?
+                                    screen.colorDepth : screen.pixelDepth)) + ";u" + escape(document.URL) +
+                            ";h" + escape(document.title.substring(0, 150)) + ";" + Math.random() +
+                            "' alt='' title='LiveInternet: показано количество просмотров и" +
+                            " посетителей' " +
+                            "border='0' width='100' height='120'\"><\/a>")
+                </script>
+            </div>
+            <!--/LiveInternet-->
+        </div>
+
     </div>
+
+    <div class="navbar-fixed-bottom row-fluid" style="position: fixed; bottom: 0; width: 100%;">
+        <footer style="width: 100%; height: 80px; padding-left: 15px; padding-right: 15px; background: #ffffff">
+            <hr style="width: 60%;" />
+            @if(ViewBag.IsAuth != null && ViewBag.IsAuth)
+                {
+                <p style="padding: 0px 0px 0px 20%">Вы вошли как: @ViewBag.Login</p>
+            }
+                <p style="padding: 0px 0px 0px 20%">&copy; @DateTime.Now.Year – <a href="http://asoiu.com/"title="Официальный сайт кафедры АСОИУ ОмГТУ">Кафедра АСОИУ</a></p>
+        </footer>
+            </div>
+
+
 </body>
 </html>

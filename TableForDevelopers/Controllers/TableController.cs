@@ -18,7 +18,7 @@ namespace TableForDevelopers.Controllers
             List<List<CardModel>> table = new List<List<CardModel>>();
             if (ModelState.IsValid)
             {
-                table = LoadTable();
+                table = LoadTable(project);
             }
             return PartialView(table);
         }
