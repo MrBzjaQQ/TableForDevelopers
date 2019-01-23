@@ -29,7 +29,6 @@ namespace TableForDevelopers.Controllers
         public ActionResult About()
         {
             CheckAuth();
-            ViewBag.Message = "Your application description page.";
 
             return View();
         }

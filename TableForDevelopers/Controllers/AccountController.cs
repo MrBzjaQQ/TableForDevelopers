@@ -244,7 +244,7 @@ namespace TableForDevelopers.Controllers
             {
                 return RedirectToAction(ParentAction, "Account", new { UserId = user.Id });
             }
-            ModelState.AddModelError("", "Failed to verify phone");
+            ModelState.AddModelError("", "Некорректный код.");
             return PartialView();
         }
         public ActionResult DisableTwoFactorAuth(string UserId)

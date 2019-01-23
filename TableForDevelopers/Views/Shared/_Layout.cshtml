@@ -49,7 +49,7 @@ ViewBag.Page = "_Layout";
                     else
                     {
                             <li>@Html.ActionLink("Аккаунт", "AccountSettings", "Account", new {UserId = ViewBag.UserId}, new {@class = "nav-link"})</li>
-                            <li>@Html.ActionLink("Выйти", "Logout", "Account", null, new {@class = "nav-link"})</li>
+                    <li>@Html.ActionLink("Выйти", "Logout", "Account", null, new {@class = "nav-link"})</li>
                     }
                     }
                     else
@@ -67,17 +67,32 @@ ViewBag.Page = "_Layout";
     <div class="container body-content">
         @RenderBody()
         
-        
+        <div style="bottom: 1%; position: fixed; right: 5%">
+        <!--LiveInternet counter-->
+        <script type="text/javascript">
+            document.write("<a href='//www.liveinternet.ru/click' " +
+                "target=_blank><img src='//counter.yadro.ru/hit?t28.6;r" +
+                escape(document.referrer) + ((typeof (screen) == "undefined") ? "" :
+                    ";s" + screen.width + "*" + screen.height + "*" + (screen.colorDepth ?
+                        screen.colorDepth : screen.pixelDepth)) + ";u" + escape(document.URL) +
+                ";h" + escape(document.title.substring(0, 150)) + ";" + Math.random() +
+                "' alt='' title='LiveInternet: показано количество просмотров и" +
+                " посетителей' " +
+                "border='0' width='88' height='120'\"><\/a>")
+        </script>
+        <!--/LiveInternet-->
+            </div>
+
     </div>
     <div style="bottom: 0; position: fixed; width: 100%;">
         <hr style="width: 60%;" />
         <footer>
-                @if(ViewBag.IsAuth != null && ViewBag.IsAuth)
+            @if(ViewBag.IsAuth != null && ViewBag.IsAuth)
                 {
                 <p style="padding: 0px 0px 0px 20%">Вы вошли как: @ViewBag.Login</p>
-                }
+            }
                 <p style="padding: 0px 0px 0px 20%">&copy; @DateTime.Now.Year – Кафедра <a href="http://asoiu.com/">АСОИУ</a></p>
-            <div style="bottom: 2%; position:fixed; padding-left: 74%">
+            <div style="bottom: 2%; position: fixed; padding-left: 74%">
                 <script type="text/javascript"><!--
     document.write(VK.Share.button(false, { type: "round", text: "Поделиться" }));
     --></script>
