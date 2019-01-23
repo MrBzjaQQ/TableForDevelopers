@@ -17,7 +17,11 @@
     </ul>
     }
     }
-    @if(Model != null && Model.Any())
+    @if(ViewBag.IsAuth != null)
+    {
+    if(ViewBag.IsAuth)
+    {
+    if(Model != null && Model.Any())
     {
     <h3>Текущие проекты:</h3>
     <ul class="list-group list-group-flush">
@@ -31,4 +35,11 @@
     {
     <h4>На данный момент проектов нет. Создайте проект.</h4>
     }
+    }
+    else
+    {
+    <h3>Для просмотра проектов требуется авторизация.</h3>
+    }
+    }
+    
 </div>

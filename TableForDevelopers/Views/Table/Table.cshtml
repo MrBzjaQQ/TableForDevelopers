@@ -38,7 +38,7 @@
                             <h5 class="card-title">@card.Header</h5>
                         </div>
                         <div class="@card.CardBodyClass">
-                            @Html.ActionLink(card.Description, "Card", "Table", new { id = card.CardID }, new {@class = "aboutCard"})<br />
+                            @Html.ActionLink(card.Description.Length > 20 ? card.Description.Substring(0, 20) + "..." : card.Description, "Card", "Table", new { id = card.CardID }, new {@class = "aboutCard"})<br />
                             Разработчик: @card.AppointedDeveloper
                         </div>
                     </div>
